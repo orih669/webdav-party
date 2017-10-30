@@ -1,0 +1,13 @@
+{
+    "DAV": "1,2",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Expose-Headers": "DAV, content-length, Allow",
+    "Server": "webdav-server/1.8.0",
+    "WWW-Authenticate": "Digest realm=\"default realm\", qop=\"auth\", nonce=\"6cfacbd0e7c2dc8997a9019c03ec8ed2\", opaque=\"1be2e3d3ed420fc88538f370d6f0e3b6\"",
+    "Allow": "PROPPATCH,PROPFIND,OPTIONS,DELETE,UNLOCK,COPY,LOCK,MOVE",
+    "Content-Type": "application/xml;charset=utf-8",
+    "Content-Length": "836",
+    "Date": "Mon, 30 Oct 2017 16:06:25 GMT",
+    "Connection": "keep-alive"
+}
