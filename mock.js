@@ -21,16 +21,42 @@ http.createServer(function (request, response)
     var code = 200;
     var headers = {};
     var stream = null;
+    var mode = 'default';
     var method = request.method.toLocaleLowerCase();
 
     if (method == 'get')
     {
+        mode = 'download';
         stream = fs.createReadStream('./file.txt');
         headers = require('./mock/get/headers.json');
     }
-    if (method == 'options')
+    if (method == 'put')
+    {
+        mode = 'upload';
+        stream = fs.createWriteStream('./file.txt');
+        headers = require('./mock/put/headers.json');
+    }
+    if (method == 'head')
+    {
+        headers = require('./mock/head/headers.json');
+    }
+    else if (method == 'lock')
+    {
+        headers = require('./mock/lock/headers.json');
+        body = fs.readFileSync('./mock/lock/body.xml', 'utf8');
+    }
+    else if (method == 'unlock')
+    {
+        code = 204;
+        headers = require('./mock/unlock/headers.json');
+    }
+    else if (method == 'options')
     {
         logger.debug('options');
+    }
+    else if (method == 'proppatch')
+    {
+        code = 207;
     }
     else if (method == 'propfind')
     {
@@ -78,17 +104,21 @@ http.createServer(function (request, response)
 
     response.writeHead(code, msg);
 
-    if (stream)
+    if (mode == 'download')
     {
         stream.pipe(response);
-        stream.on('data', function(part) 
+        stream.on('end', function() { logger.debug('download end'); });
+        stream.on('data', function(part) { logger.debug('download part: ' + part); });
+    }
+    else if (mode == 'upload')
+    {
+        request.pipe(stream);
+        request.on('end', function() 
         {
-            logger.debug('stream part: ' + part);
+            logger.debug('upload end'); 
+            response.end();
         });
-        stream.on('end', function()
-        {
-            logger.debug('stream end');
-        });
+        request.on('data', function(part) { logger.debug('upload part: ' + part); });
     }
     else
     {
