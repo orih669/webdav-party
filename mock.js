@@ -27,13 +27,16 @@ http.createServer(function (request, response)
     if (method == 'get')
     {
         mode = 'download';
-        stream = fs.createReadStream('./file.txt');
+        var stats = fs.statSync("./file.docx");
+        var size = stats.size;
+        logger.debug('size: ' + size);
+        stream = fs.createReadStream('./file.docx');
         headers = require('./mock/get/headers.json');
     }
     if (method == 'put')
     {
         mode = 'upload';
-        stream = fs.createWriteStream('./file.txt');
+        stream = fs.createWriteStream('./file.docx');
         headers = require('./mock/put/headers.json');
     }
     if (method == 'head')
@@ -97,8 +100,8 @@ http.createServer(function (request, response)
     logger.debug('==================== response ====================');
     logger.startBlock();
 
-    logger.debug('headers: ' + JSON.stringify(headers));
-    logger.debug('body: ' + JSON.stringify(body));
+    logger.trace('headers: ' + JSON.stringify(headers));
+    logger.trace('body: ' + JSON.stringify(body));
 
     logger.endBlocks();
 
@@ -108,7 +111,7 @@ http.createServer(function (request, response)
     {
         stream.pipe(response);
         stream.on('end', function() { logger.debug('download end'); });
-        stream.on('data', function(part) { logger.debug('download part: ' + part); });
+        stream.on('data', function(part) { logger.trace('download part: ' + part); });
     }
     else if (mode == 'upload')
     {
@@ -118,7 +121,7 @@ http.createServer(function (request, response)
             logger.debug('upload end'); 
             response.end();
         });
-        request.on('data', function(part) { logger.debug('upload part: ' + part); });
+        request.on('data', function(part) { logger.trace('upload part: ' + part); });
     }
     else
     {

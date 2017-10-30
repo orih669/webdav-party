@@ -6,6 +6,6 @@ config.server.port = 1111;
 
 // ================================================== Logger ==================================================//
 config.loggers = {};
-config.loggers['default'] = {level: 6, filepath: './log.txt'}
+config.loggers['default'] = {level: 5, filepath: './log.txt'}
 
 module.exports = config;
