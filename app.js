@@ -1,7 +1,7 @@
 const webdav = require('webdav-server').v2;
 
 const server = new webdav.WebDAVServer({
-    port: 1900
+    port: 1901
 });
 
 server.rootFileSystem().addSubTree(server.createExternalContext(), {
@@ -13,6 +13,11 @@ server.rootFileSystem().addSubTree(server.createExternalContext(), {
 })
 
 server.afterRequest((arg, next) => {
+    console.log('>>', arg.request.method, arg.uri, '>', arg.response.statusCode, arg.response.statusMessage);
+    next();
+})
+
+server.beforeRequest((arg, next) => {
     console.log('>>', arg.request.method, arg.uri, '>', arg.response.statusCode, arg.response.statusMessage);
     next();
 })

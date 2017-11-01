@@ -56,6 +56,8 @@ http.createServer(function (request, response)
     else if (method == 'options')
     {
         logger.debug('options');
+
+        headers = require('./mock/options/headers.json');
     }
     else if (method == 'proppatch')
     {
